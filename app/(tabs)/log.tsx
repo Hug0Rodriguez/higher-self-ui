@@ -10,6 +10,7 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 import { Toast } from "@/components/Toast";
 import { saveEntrySample } from "@/storage/entries";
 import { AnimatedAtoms } from "@/components/AnimatedAtoms";
+import { DailyVibrationalDisplay } from "@/components/DailyVibrationalDisplay";
 
 const PROMPTS = [
     {
@@ -58,7 +59,13 @@ export default function LogScreen() {
 
     async function onSave() {
         await saveEntrySample({
-            date: new Date().toISOString().slice(0, 10),
+            date: (() => {
+                const d = new Date();
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            })(),
             alignment_pct: pct,
             prompt_id: prompt.id,
             answer_tags: tags,
@@ -77,6 +84,7 @@ export default function LogScreen() {
             }}
         >
             <Text style={textStyles.h1}>Today</Text>
+            <DailyVibrationalDisplay />
             <AnimatedAtoms level={pct} />
             <AlignmentDial value={pct} onChange={setPct} />
             <PromptCard

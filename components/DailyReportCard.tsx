@@ -1,95 +1,15 @@
 import { View, Pressable, Animated } from "react-native";
 import { Text } from "@/components/Text";
 import { colors } from "@/theme/colors";
-import TodayLineChart from "@/components/TodayLineChart";
+import DailyChart from "@/components/DailyChart";
 import { useRef, useEffect, useState } from "react";
 
-function Badge({
-    label,
-    type = "default",
-}: {
-    label: string;
-    type?: "default" | "positive" | "negative" | "neutral";
-}) {
-    const getColors = () => {
-        switch (type) {
-            case "positive":
-                return {
-                    bg: "rgba(34, 197, 94, 0.15)",
-                    border: "rgba(34, 197, 94, 0.3)",
-                    text: colors.good,
-                };
-            case "negative":
-                return {
-                    bg: "rgba(239, 68, 68, 0.15)",
-                    border: "rgba(239, 68, 68, 0.3)",
-                    text: colors.bad,
-                };
-            case "neutral":
-                return {
-                    bg: "rgba(139, 92, 246, 0.15)",
-                    border: "rgba(139, 92, 246, 0.3)",
-                    text: colors.accent,
-                };
-            default:
-                return {
-                    bg: "rgba(255, 255, 255, 0.05)",
-                    border: colors.border,
-                    text: colors.sub,
-                };
-        }
-    };
-
-    const badgeColors = getColors();
-
-    return (
-        <View
-            style={{
-                backgroundColor: badgeColors.bg,
-                borderColor: badgeColors.border,
-                borderWidth: 1,
-                borderRadius: 12,
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-            }}
-        >
-            <Text
-                style={{
-                    color: badgeColors.text,
-                    fontSize: 12,
-                    fontWeight: "600",
-                    letterSpacing: 0.3,
-                }}
-            >
-                {label}
-            </Text>
-        </View>
-    );
-}
-
-export function ReportCard({
-    title,
+export function DailyReportCard({
     avg,
     delta,
-    drainers,
-    booster,
-    autopilotPct,
-    gaveInDays,
-    trendValues,
 }: {
-    title: string;
     avg: number;
     delta: number;
-    drainers: string[];
-    booster?: string;
-    autopilotPct: number;
-    gaveInDays: number;
-    trendValues: number[];
 }) {
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const glowAnim = useRef(new Animated.Value(0)).current;
@@ -128,12 +48,6 @@ export function ReportCard({
             friction: 5,
             useNativeDriver: true,
         }).start();
-    };
-
-    const getDeltaType = () => {
-        if (delta > 5) return "positive";
-        if (delta < -5) return "negative";
-        return "neutral";
     };
 
     const getAlignmentLevel = () => {
@@ -210,7 +124,7 @@ export function ReportCard({
                                         letterSpacing: 0.5,
                                     }}
                                 >
-                                    {title.toUpperCase()}
+                                    DAILY AVERAGE
                                 </Text>
                                 <View
                                     style={{
@@ -324,9 +238,7 @@ export function ReportCard({
                             }}
                         >
                             <View style={{ paddingHorizontal: 0 }}>
-                                <TodayLineChart
-                                    key={`daily-chart-${Date.now()}`}
-                                />
+                                <DailyChart key={`daily-chart-${Date.now()}`} />
                             </View>
                         </Animated.View>
                     )}
